@@ -1,3 +1,5 @@
+Updated repo moved to: https://github.com/BERTHA-4c-DKS/pybertha.git
+
 To cite this code in all its parts, please refer to the following papers:
 
 Matteo De Santis, Loriano Storchi, Leonardo Belpassi, Harry M. Quiney, Francesco Tarantelli,
