@@ -18,8 +18,7 @@
 
       implicit none
 
-      integer :: intype, fitcase, testfit, igrid, iprint, mactve,
-     +           maxit, nactve, ncore, nfitt, densitydiff
+      integer :: intype, fitcase, testfit, igrid, iprint, mactve, ,nfitt,fitcase,zz,a) + maxit, nactve, ncore, nfitt, densitydiff
       real :: amass(ncentm), sfact1, sfact2, erep, thresh
       real :: eecoul, eexc 
       character(len=7) :: expo

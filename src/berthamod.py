@@ -134,6 +134,33 @@ class pybertha:
 
         self.set_densitydiff (0)
 
+    def get_density_on_grid (self, grid):
+
+        # in true o mainrun o fockmtx 
+
+        density = None # vector N double
+
+
+        # grid N x 4 array containing x,y,z,w double  
+        # chiamata interno su bertha_wrapper che viene poi implemntata su bertha_ng
+
+        return density
+
+    def set_embpot_on_grid (self, grid, pot):
+
+        # solo init true rivedere
+
+        pot = None # vector N double
+
+        # grid N x 4 array containing x,y,z,w double  
+
+        # in bertha wrapper rimane e serve sia per mainrun che per get_fovk_realtime
+
+        # questo dato va in bertha_wrapper e poi con if decide se sommare o meno duranti il ciclo SCF
+        # e durante la chiamata a get_fock_realtime
+
+        return
+
     def get_natoms(self):
         """
         Return natoms 
