@@ -138,6 +138,21 @@ class pybertha:
 
         # in true o mainrun o fockmtx 
 
+        if self.__realtime_init or self.__mainrundone:
+            if isinstance(grid,(numpy.ndarray)):
+                if len(grid.shape) == 2:
+                    if grid.shape[1] != 4:
+                        npoint = grid.shape[0]
+
+                        
+                    else:
+                        raise TypeError("get_density_on_grid: input must be a 2D numpy.ndarray with 4 columns")
+                else:
+                    raise TypeError("get_density_on_grid: input must be a 2D numpy.ndarray")
+            else:
+                raise TypeError("get_density_on_grid: input must be a numpy.ndarray")
+
+
         density = None # vector N double
 
 

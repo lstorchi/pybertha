@@ -65,10 +65,11 @@ def runspbertha (pberthaopt):
     import berthamod
     
     print("Options: ")
-    print(pberthaopt) 
+    for att in [a for a in dir(pberthaopt) if not a.startswith('__')]:
+        print(att, " = ", getattr(pberthaopt, att)) 
     print("")
     print("")
-    
+
     if not os.path.isfile(pberthaopt.wrapperso):
         print("SO File ", pberthaopt.wrapperso, " does not exist")
         exit(1)

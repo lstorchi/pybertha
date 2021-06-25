@@ -40,8 +40,11 @@ def runspberthaembedrt (pberthaopt):
     import berthamod
     
     print("Options: ")
-    print(pberthaopt) 
+    for att in [a for a in dir(pberthaopt) if not a.startswith('__')]:
+        print(att, " = ", getattr(pberthaopt, att)) 
     print("")
+    print("")
+
     print("")
     
     if not os.path.isfile(pberthaopt.wrapperso):
@@ -101,6 +104,7 @@ def runspberthaembedrt (pberthaopt):
     cstart = time.process_time() 
     
     #main run here
+    ovapm, eigem, fockm, eigen = bertha.run()
 
     end = time.time()
     cend = time.process_time()
