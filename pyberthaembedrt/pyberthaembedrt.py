@@ -100,22 +100,28 @@ def runspberthaembedrt (pberthaopt):
     print("     level shift: ", sfact)
     print("")
     
-    start = time.time()
-    cstart = time.process_time() 
-    
-    #main run here
-    ovapm, eigem, fockm, eigen = bertha.run()
-
-    end = time.time()
-    cend = time.process_time()
 
     #generate a sample grid
     npoints = 100
     grid = numpy.zeros((npoints, 4))
+    grid = numpy.ascontiguousarray(grid, dtype=numpy.double)
+
+    pot = numpy.zeros(npoints)
+    pot = numpy.ascontiguousarray(pot, dtype=numpy.double)
+
+    start = time.time()
+    cstart = time.process_time() 
+
+    bertha.set_embpot_on_grid(grid, pot)
+    
+    #main run here
+    ovapm, eigem, fockm, eigen = bertha.run()
 
     density = bertha.get_density_on_grid(grid)
-    
     print(density)
+
+    end = time.time()
+    cend = time.process_time()
 
     print("Totaltime:    ", end - start, " (CPU time: " , cend - cstart, ") s ")
     print("MainRun Time: ", bertha.get_mainruntime() , \
