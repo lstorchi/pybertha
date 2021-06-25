@@ -157,6 +157,7 @@ class pybertha:
 
                         # call to main function
 
+                        # call in self.__bertha
 
                     else:
                         raise TypeError("get_density_on_grid: input must be a 2D numpy.ndarray with 4 columns")
@@ -171,7 +172,7 @@ class pybertha:
 
         # solo init true rivedere
 
-        pot = None # vector N double
+        # pot vector N double
 
         # grid N x 4 array containing x,y,z,w double  
 
@@ -179,6 +180,8 @@ class pybertha:
 
         # questo dato va in bertha_wrapper e poi con if decide se sommare o meno duranti il ciclo SCF
         # e durante la chiamata a get_fock_realtime
+
+        if self.__init:
 
         return
 
