@@ -108,7 +108,15 @@ def runspberthaembedrt (pberthaopt):
 
     end = time.time()
     cend = time.process_time()
+
+    #generate a sample grid
+    npoints = 100
+    grid = numpy.zeros((npoints, 4))
+
+    density = bertha.get_density_on_grid(grid)
     
+    print(density)
+
     print("Totaltime:    ", end - start, " (CPU time: " , cend - cstart, ") s ")
     print("MainRun Time: ", bertha.get_mainruntime() , \
             " (CPU time: " , bertha.get_mainrunctime(), ") s ")

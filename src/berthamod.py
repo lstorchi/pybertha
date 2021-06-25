@@ -132,6 +132,8 @@ class pybertha:
 
         self.__realtime_init = False
 
+        self.__childthread = False
+
         self.set_densitydiff (0)
 
     def get_density_on_grid (self, grid):
@@ -141,10 +143,12 @@ class pybertha:
         if self.__realtime_init or self.__mainrundone:
             if isinstance(grid,(numpy.ndarray)):
                 if len(grid.shape) == 2:
-                    if grid.shape[1] != 4:
+
+                    print(grid.shape)
+                    if grid.shape[1] == 4:
                         npoint = grid.shape[0]
 
-                        
+
                     else:
                         raise TypeError("get_density_on_grid: input must be a 2D numpy.ndarray with 4 columns")
                 else:
@@ -152,9 +156,7 @@ class pybertha:
             else:
                 raise TypeError("get_density_on_grid: input must be a numpy.ndarray")
 
-
         density = None # vector N double
-
 
         # grid N x 4 array containing x,y,z,w double  
         # chiamata interno su bertha_wrapper che viene poi implemntata su bertha_ng
@@ -175,6 +177,28 @@ class pybertha:
         # e durante la chiamata a get_fock_realtime
 
         return
+
+    def get_childthread(self):
+        """
+        Return childthread  value
+        """
+
+        return self.__childthread
+
+    def set_childthread(self, val):
+
+        """
+        Set childthread, if True the run spawn a thread to call 
+        the BERTHA mainrun. If False (to be used with Intel compiler 
+        and OMP because of stackseze realted issue) a thread is not 
+        spawned, in cusch a case cannot stop the main run 
+        using a Ctrl-C.
+        """
+
+        if not isinstance(val, bool):
+            raise TypeError("set_densitydiff: input must be a bool")
+
+        self.__childthread = val
 
     def get_natoms(self):
         """
@@ -562,7 +586,8 @@ class pybertha:
             start = time.time()
             cstart = time.process_time()
 
-            maint = threading.Thread(target=self.__bertha.mainrun, \
+            if (self.__childthread):
+                maint = threading.Thread(target=self.__bertha.mainrun, \
                     args=[in_fittcoefffname, \
                           in_vctfilename, \
                           in_ovapfilename, \
@@ -571,10 +596,19 @@ class pybertha:
                           ctypes.c_void_p(ovapbuffer.ctypes.data), \
                           ctypes.c_void_p(eigenvctbu.ctypes.data), \
                           ctypes.c_void_p(fockbuffer.ctypes.data)])
-            maint.daemon = True
-            maint.start()
-            while maint.is_alive():
+                maint.daemon = True
+                maint.start()
+                while maint.is_alive():
                     maint.join(.1)
+            else:
+                self.__bertha.mainrun (in_fittcoefffname, \
+                    in_vctfilename, \
+                    in_ovapfilename, \
+                    in_fittfname, \
+                    ctypes.c_void_p(eigen.ctypes.data), \
+                    ctypes.c_void_p(ovapbuffer.ctypes.data), \
+                    ctypes.c_void_p(eigenvctbu.ctypes.data), \
+                    ctypes.c_void_p(fockbuffer.ctypes.data))
 
             end = time.time()
             cend = time.process_time()
