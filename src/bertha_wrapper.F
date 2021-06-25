@@ -18,7 +18,8 @@
 
       implicit none
 
-      integer :: intype, fitcase, testfit, igrid, iprint, mactve, ,nfitt,fitcase,zz,a) + maxit, nactve, ncore, nfitt, densitydiff
+      integer :: intype, fitcase, testfit, igrid, iprint, mactve,
+     +           maxit, nactve, ncore, nfitt, densitydiff
       real :: amass(ncentm), sfact1, sfact2, erep, thresh
       real :: eecoul, eexc 
       character(len=7) :: expo
@@ -85,9 +86,9 @@ ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       integer :: counter, icent, j, ii, jj, i, iter, 
      + nuca, nucb, nucc, nuccnt, rc, istate, a, iocc
 
-      real, allocatable :: v(:), zz(:)
+      real, allocatable :: v(:), zz(:), centfun(:)
 
-      real :: monoelectronenergy, centfun(ncentm), 
+      real :: monoelectronenergy, 
      + dist, r1x, r1y, r1z, d1, r2x, 
      + r2y, r2z, d2, scprod, ang, diff, eold, oldecoul, rthresh1, 
      + rthresh2, efittcoulplusexc, efittcoul, etemp, excfit, 
@@ -108,6 +109,9 @@ ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       cputime11 = cputime ()
 
+      allocate(centfun(ncentm), stat=rc)
+      if (rc.ne.0) call errmsg('error allocating memory')
+
       if (dumpfiles .eq. 1) then 
         open (unit=11, file=fittcoefffname, err=9999,
      +        status ="unknown")
@@ -124,7 +128,9 @@ ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       call initijkvec()
 
       call initfitting(fitcase,nfitt,fittfname)
+
       call flabel(centfun)
+
 ! nuclear repulsion energy
       erep = 0.0
       do nuca = 1,ncent
@@ -672,6 +678,8 @@ c     call getresourcesusage ()
       if (densitydiff .eq. 1) then 
         deallocate(olddensity)
       endif
+
+      deallocate(centfun)
 
       wtimeiter = walltime ()
       !call gencubefile(ncent,coord,iznuc,nfitt,fitcase)
