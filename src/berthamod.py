@@ -139,6 +139,10 @@ class pybertha:
     def get_density_on_grid (self, grid):
 
         # in true o mainrun o fockmtx 
+        # grid N x 4 array containing x,y,z,w double  
+        # chiamata interno su bertha_wrapper che viene poi implemntata su bertha_ng
+
+        density = None # vector N double
 
         if self.__realtime_init or self.__mainrundone:
             if isinstance(grid,(numpy.ndarray)):
@@ -146,7 +150,12 @@ class pybertha:
 
                     print(grid.shape)
                     if grid.shape[1] == 4:
-                        npoint = grid.shape[0]
+                        npoints = grid.shape[0]
+
+                        density = numpy.zeros(npoints, dtype=numpy.double)
+                        density = numpy.ascontiguousarray(density, dtype=numpy.double)
+
+                        # call to main function
 
 
                     else:
@@ -155,11 +164,6 @@ class pybertha:
                     raise TypeError("get_density_on_grid: input must be a 2D numpy.ndarray")
             else:
                 raise TypeError("get_density_on_grid: input must be a numpy.ndarray")
-
-        density = None # vector N double
-
-        # grid N x 4 array containing x,y,z,w double  
-        # chiamata interno su bertha_wrapper che viene poi implemntata su bertha_ng
 
         return density
 
