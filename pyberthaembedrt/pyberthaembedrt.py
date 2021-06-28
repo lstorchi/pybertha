@@ -1,5 +1,6 @@
 import argparse
 import ctypes
+from os import X_OK
 import numpy
 import sys
 import re
@@ -102,12 +103,27 @@ def runspberthaembedrt (pberthaopt):
     
 
     #generate a sample grid
-    npoints = 100
+    npoints = 10
     grid = numpy.zeros((npoints, 4))
     grid = numpy.ascontiguousarray(grid, dtype=numpy.double)
 
     pot = numpy.zeros(npoints)
     pot = numpy.ascontiguousarray(pot, dtype=numpy.double)
+
+    x = -1.0
+    y = -100.0
+    z = -1000.0
+    w = 1.0
+    for i in range(npoints):
+        grid[i,0] = x
+        grid[i,1] = y
+        grid[i,2] = z
+        grid[i,3] = w
+
+        x += 1.0
+        y += 1.0
+        z += 1.0
+        w += 0.1
 
     start = time.time()
     cstart = time.process_time() 
@@ -118,7 +134,10 @@ def runspberthaembedrt (pberthaopt):
     ovapm, eigem, fockm, eigen = bertha.run()
 
     density = bertha.get_density_on_grid(grid)
-    print(density)
+
+    for i in range(npoints):
+        val = grid[i,0] * grid[i,1]  * grid[i,2] * grid[i,3]
+        print("Python L: %15.5f vs %15.5f"%(density[i], val))
 
     end = time.time()
     cend = time.process_time()

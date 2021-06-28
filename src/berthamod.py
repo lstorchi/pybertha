@@ -159,6 +159,9 @@ class pybertha:
 
                         # call to main function to get the density on the grid
                         # call in self.__bertha
+                        self.__bertha.bertha_get_density_ongrid(ctypes.c_int(npoints), \
+                            ctypes.c_void_p(grid.ctypes.data), \
+                            ctypes.c_void_p(density.ctypes.data))
 
                     else:
                         raise TypeError("get_density_on_grid: input must be a 2D numpy.ndarray with 4 columns")
